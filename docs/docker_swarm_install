@@ -1,0 +1,41 @@
+Created by: Charuhas Vidwans
+
+Doc talks about manual installation of Docker swarm on Linux machines
+
+- Manually installing docker swarm:
+https://docs.docker.com/swarm/install-manual/
+http://devopscube.com/how-to-setup-and-configure-docker-swarm-cluster/
+
+* Deploy following VMs
+- Manager
+- Node1
+- Node2
+- Node3
+
+* Run the installation script on all the desired linux VMs. This will install the docker
+    $ curl -sSL https://get.docker.com/ | sh
+
+* start Engine so it listens for Swarm nodes on port 2375
+  sudo docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+  
+* Give the user root privileges
+  sudo usermod -aG docker <user name>
+  
+* logout. Do these steps for all the linux vms
+
+* Now, on your manager VM, execute following command. This will enable backend discovery.
+  docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap
+  
+* Create a cluster. Create a primary manager by below command:
+  docker run -d -p 4000:4000 swarm manage -H :4000 --replication --advertise <manager0_ip>:4000 consul://<consul_ip>:8500
+Replace both <manager0_ip> and <consul_ip> with the same IP address.
+
+* On nodes do following:
+docker run -d swarm join --advertise=<node_ip>:2375 consul://<consul_ip>:8500
+
+
+
+
+
+
+
