@@ -34,6 +34,12 @@ Replace both <manager0_ip> and <consul_ip> with the same IP address.
 docker run -d swarm join --advertise=<node_ip>:2375 consul://<consul_ip>:8500
 
 
+Docker python API readme:
+
+https://docker-py.readthedocs.io/en/latest/
+
+
+
 
 
 
